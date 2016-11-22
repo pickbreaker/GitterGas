@@ -9,9 +9,18 @@
 class Cell {
 public:
     Cell(int id);
+
     int get_id();
+
+    void set_value(int wert);
+
+    int get_value();
+
+    Cell(int id, int wert);
+
 private:
     int id;
+    int value;
 };
 
 
