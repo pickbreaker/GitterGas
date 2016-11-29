@@ -3,6 +3,7 @@
 //
 
 #include <cmath>
+#include <iostream>
 #include "Cell.h"
 
 using namespace std;
@@ -39,6 +40,10 @@ vector<int> Cell::get_coords() const {
     return coords;
 }
 
+Basis Cell::get_atoms() {
+    return base;
+}
+
 //Relationen
 vector<int> Cell::distance__to(Cell c) {
     vector<int> vector1;
@@ -54,7 +59,7 @@ double Cell::distance_to(Cell c) {
     double res = 0;
     vector<int> dist = distance__to(c);
     for (int i = 0; i < dist.size(); i++) {
-        res += pow(dist[i], dist.size());
+        res += pow((double) dist[i], dist.size());
     }
     res = pow(res, 1.0 / dist.size());
     return res;
@@ -67,6 +72,23 @@ void Cell::set_value(int wert) {
 
 void Cell::move_to(vector<int> Koordinaten) {
     coords = Koordinaten;
+}
+
+void Cell::set_base(Basis basis) {
+    for (int i = 0; i < basis.Atome().size(); ++i) {
+        for (int j = 0; j < coords.size(); ++j) {
+            try {
+                if (j < basis.Atome()[i].second.size()) {
+                    basis.Atome()[i].second[j] += coords[j];
+                } else {
+                    throw "Dimension Mismatch";
+                }
+            } catch (exception exception1) {
+                cout << exception1.what();
+            }
+        }
+    }
+    base = basis;
 }
 
 //Operatoren

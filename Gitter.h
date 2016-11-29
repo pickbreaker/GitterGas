@@ -41,6 +41,8 @@ public:
 
     vector<pair<int, int>> neighbours(int posx, int posy);
 
+    vector<pair<Atom, vector<double>>> neighbours(int posx, int posy, int index);
+
     vector<pair<pair<int, int>, int>> neighbours_values(int posx, int posy);
 
     //Print-Methoden
@@ -54,6 +56,8 @@ public:
 
     //Setter-Methoden
     void label(int xpos, int ypos);
+
+    void set_base(Basis basis);
 
     //Transformations-Methoden
     /*int use_function(string fkt);*/
@@ -71,6 +75,8 @@ private:
 
 //Interne Methoden
     void coords_pos_fix();
+
+    double distance(vector<double> v1, vector<double> v2);
 
 };
 

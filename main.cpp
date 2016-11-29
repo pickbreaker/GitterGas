@@ -1,10 +1,14 @@
 #include <iostream>
 #include <vector>
 #include "Gitter.h"
+#include "Basis.h"
+#include <initializer_list>
+
 /*
 #include <stdlib.h>
 #include <time.h>
 #include <stdio.h>
+
 
 using std::vector;
 using std::cout;
@@ -32,6 +36,18 @@ void set_value(Gitter &gitter) {
     }
 }
 
+vector<pair<Atom, vector<double>>>
+gen_base(vector<pair<Atom, vector<double>>> prev, string name, string zeichen, int o_zahl, double xrel, double yrel) {
+    vector<double> coords;
+    coords.push_back(xrel);
+    coords.push_back(yrel);
+    pair<Atom, vector<double>> paar;
+    paar.first = Atom(name, zeichen, o_zahl);
+    paar.second = coords;
+    prev.push_back(paar);
+    return prev;
+}
+
 int main() {
     //Gitter erstellen
     cout << "Gewünschte Größe: ";
@@ -42,6 +58,22 @@ int main() {
     Gitter g(groesse);
     set_label(g);
     set_value(g);
+    Basis basis;
+    vector<pair<Atom, vector<double>>> vector2;
+    basis = Basis(gen_base(gen_base(gen_base(vector2, "Sauerstoff", "O", 8, 0.0, 0.0), "Natrium", "Na", 11, 0.25, 0.25),
+                           "Wasserstoff", "H", 1, 1.0 / 16.0, 1.0 / 16.0));
+    g.set_base(basis);
+    for (int j = 0; j < g.size(); ++j) {
+        for (int i = 0; i < g.size(); ++i) {
+            for (int k = 0; k < g.cell_at(j, i).get_atoms().Atome().size(); ++k) {
+                cout << g.cell_at(j, i).get_atoms().Atome()[k].first.get_zeichen() << ":"
+                     << g.cell_at(j, i).get_atoms().Atome()[k].second[0] << "|"
+                     << g.cell_at(j, i).get_atoms().Atome()[k].second[1] << "\t";
+            }
+            cout << " |\t";
+        }
+        cout << endl;
+    }
 
     //ID-Matrix ausgeben
     /*  for (int k = 0; k < groesse; k++) {
@@ -104,6 +136,10 @@ int main() {
         cout << "Arithmetisches Mittel der Nachbarwerte: " << mean / vector1.size() << endl;
     } else {
         cout << "Keine Nachbarn vorhanden" << endl;
+    }
+    vector<pair<Atom, vector<double>>> vector3 = g.neighbours(xpos, ypos, 1);
+    for (int l = 0; l < vector3.size(); ++l) {
+        cout << vector3[l].first.get_name() << "\t" << vector3[l].second[0] << "|" << vector3[l].second[1] << endl;
     }
 
     //zufällige Position auslesen

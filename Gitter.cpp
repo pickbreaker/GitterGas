@@ -106,6 +106,44 @@ vector<pair<int, int>> Gitter::neighbours(int posx, int posy) {
     return vector1;
 }
 
+vector<pair<Atom, vector<double>>> Gitter::neighbours(int posx, int posy, int index) {
+    vector<pair<int, int>> vector1;
+    if (posy > 0 && posx < groesse && posx > -1 && posy - 1 < groesse) {
+        vector1.push_back(pair<int, int>(posx, posy - 1));
+    }
+    if (posx > 0 && posy < groesse && posy > -1 && posx - 1 < groesse) {
+        vector1.push_back(pair<int, int>(posx - 1, posy));
+    }
+    if (posx < groesse - 1 && posy < groesse && posy > -1 && posx + 1 > -1) {
+        vector1.push_back(pair<int, int>(posx + 1, posy));
+    }
+    if (posy < groesse - 1 && posx < groesse && posx > -1 && posy + 1 > -1) {
+        vector1.push_back(pair<int, int>(posx, posy + 1));
+    }
+    vector<pair<Atom, vector<double>>> vector2;
+    for (int i = 0; i < vector1.size(); ++i) {
+        for (int j = 0; j < cell_at(vector1[i].first, vector1[i].second).get_atoms().Atome().size(); ++j) {
+            if (vector2.size() == 0) {
+                pair<Atom, vector<double>> paar;
+                paar = pair<Atom, vector<double >>(Atom(), vector<double>(-2, 2));
+                vector2.push_back(paar);
+            } else {
+                if (distance(cell_at(posx, posy).get_atoms().Atome()[index].second,
+                             cell_at(vector1[i].first, vector1[i].second).get_atoms().Atome()[j].second) <
+                    distance(cell_at(posx, posy).get_atoms().Atome()[index].second, vector2[0].second)) {
+                    vector2.clear();
+                    vector2.push_back(cell_at(vector1[i].first, vector1[i].second).get_atoms().Atome()[j]);
+                } else if (distance(cell_at(posx, posy).get_atoms().Atome()[index].second,
+                                    cell_at(vector1[i].first, vector1[i].second).get_atoms().Atome()[j].second) ==
+                           distance(cell_at(posx, posy).get_atoms().Atome()[index].second, vector2[0].second)) {
+                    vector2.push_back(cell_at(vector1[i].first, vector1[i].second).get_atoms().Atome()[j]);
+                }
+            }
+        }
+    }
+    return vector2;
+}
+
 vector<pair<pair<int, int>, int>> Gitter::neighbours_values(int posx, int posy) {
     vector<pair<pair<int, int>, int>> vector1;
     if (posy > 0 && posx < groesse && posx > -1 && posy - 1 < groesse) {
@@ -185,6 +223,14 @@ void Gitter::label(int xpos, int ypos) {
     v[ypos][xpos] = Cell(ypos * groesse + xpos, vector2);
 }
 
+void Gitter::set_base(Basis basis) {
+    for (int i = 0; i < size(); i++) {
+        for (int j = 0; j < size(); j++) {
+            cell_at(j, i).set_base(basis);
+        }
+    }
+}
+
 //Transformations-Methoden
 /*int Gitter::use_function(string fkt) {
     if ((int) fkt.find("||") > -1 || (int) fkt.find("&&") > -1 || (int) fkt.find("->") > -1) {
@@ -230,4 +276,20 @@ void Gitter::coords_pos_fix() {
         }
     }
     v = neu.Data();
+}
+
+double Gitter::distance(vector<double> v1, vector<double> v2) {
+    double dist = 0;
+    try {
+        for (int i = 0; i < v1.size(); ++i) {
+            if (i < v2.size()) {
+                dist += (v1[i] - v2[i]) * (v1[i] - v2[i]);
+            } else {
+                throw "Dimension Mismatch";
+            }
+        }
+        dist /= v1.size();
+    } catch (exception exception1) {
+        cout << exception1.what() << endl;
+    }
 }

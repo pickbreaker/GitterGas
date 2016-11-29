@@ -6,6 +6,7 @@
 #define GITTERGAS_CELL_H
 
 #include <vector>
+#include "Basis.h"
 
 using namespace std;
 
@@ -26,6 +27,8 @@ public:
 
     vector<int> get_coords() const;
 
+    Basis get_atoms();
+
     //Relationen
     vector<int> distance__to(Cell c);
 
@@ -35,6 +38,8 @@ public:
     void set_value(int wert);
 
     void move_to(vector<int> Koordinaten);
+
+    void set_base(Basis basis);
 
     //Operatoren
     bool operator==(const Cell &comp);
@@ -50,6 +55,7 @@ private:
     int id;
     int value;
     vector<int> coords;
+    Basis base;
 };
 
 
