@@ -58,10 +58,32 @@ int main() {
     Gitter g(groesse);
     set_label(g);
     set_value(g);
+    cout << "Basis erstellen" << endl;
     Basis basis;
     vector<pair<Atom, vector<double>>> vector2;
-    basis = Basis(gen_base(gen_base(gen_base(vector2, "Sauerstoff", "O", 8, 0.0, 0.0), "Natrium", "Na", 11, 0.25, 0.25),
-                           "Wasserstoff", "H", 1, 1.0 / 16.0, 1.0 / 16.0));
+    vector<pair<Atom, vector<double>>> base;
+    char c = 'y';
+    while (c == 'y') {
+        string string1;
+        string string2;
+        int integer1;
+        double double1;
+        double double2;
+        cout << "Name des Elements: ";
+        cin >> string1;
+        cout << "Formelzeichen des Elements: ";
+        cin >> string2;
+        cout << "Ordnungszahl: ";
+        cin >> integer1;
+        cout << "X-Position: ";
+        cin >> double1;
+        cout << "Y-Position: ";
+        cin >> double2;
+        cout << "Weiteres Element hinzufügen(y/n)? ";
+        cin >> c;
+        base = gen_base(base, string1, string2, integer1, double1, double2);
+    }
+    basis = Basis(base);
     g.set_base(basis);
     for (int j = 0; j < g.size(); ++j) {
         for (int i = 0; i < g.size(); ++i) {
@@ -76,44 +98,11 @@ int main() {
     }
 
     //ID-Matrix ausgeben
-    /*  for (int k = 0; k < groesse; k++) {
-          for (int l = 0; l < groesse; l++) {
-              cout << g.cell_at(l, k).get_id() << "\t";
-          }
-          cout << endl;
-      }
-      cout << endl;*/
     cout << g.print_ids();
 
     //Werte-Matrix ausgeben
-    /* for (int k = 0; k < groesse; k++) {
-         for (int l = 0; l < groesse; l++) {
-             cout << g.cell_at(l, k).get_value() << "\t";
-         }
-         cout << endl;
-     }
-     cout << endl;*/
     cout << g.print_values();
 
-    //Werte-Matrix verändern und ausgeben
-    /*  vector<pair<pair<int, int>, int>> vector1;
-      double mean = 0;
-      for (int k = 0; k < groesse; k++) {
-          for (int l = 0; l < groesse; l++) {
-              vector1 = g.neighbours_values(l, k);
-              if (g.size() > 0) {
-                  for (int i = 0; i < vector1.size(); i++) {
-                      pair<pair<int, int>, int> entry;
-                      entry = vector1[i];
-                      mean += entry.second;
-                  }
-                  mean = mean / g.size();
-                  g.cell_at(l, k).set_value((int) mean);
-              }
-              cout << g.cell_at(l, k).get_value() << "\t";
-          }
-          cout << endl;
-      }*/
     vector<pair<pair<int, int>, int>> vector1;
     double mean = 0;
     //spezielle Position auslesen
@@ -123,7 +112,12 @@ int main() {
     cout << "Y-Position:";
     int ypos;
     cin >> ypos;
+    int index;
+    cout << "Atom-Nr.: ";
+    cin >> index;
     cout << g.print_neighbours_at(xpos, ypos);
+
+    //Arithmetisches Mittel der Nachbarwerte ausgeben
     mean = 0;
     vector1 = g.neighbours_values(xpos, ypos);
     for (int i = 0; i < vector1.size(); i++) {
@@ -137,15 +131,22 @@ int main() {
     } else {
         cout << "Keine Nachbarn vorhanden" << endl;
     }
-    vector<pair<Atom, vector<double>>> vector3 = g.neighbours(xpos, ypos, 1);
+
+    //Nächstes Atom finden
+    vector<pair<Atom, vector<double>>> vector3 = g.neighbours(xpos, ypos, index);
     for (int l = 0; l < vector3.size(); ++l) {
-        cout << vector3[l].first.get_name() << "\t" << vector3[l].second[0] << "|" << vector3[l].second[1] << endl;
+        cout << vector3[l].first.get_name() << "\t" << vector3[l].second[0] + 0.0 << "|" << vector3[l].second[1] + 0.0
+             << endl;
+    }
+    if (vector3.size() > 0) {
+        cout << g.cell_at(xpos, ypos).get_atoms().Atome()[index].second[0] << "|"
+             << g.cell_at(xpos, ypos).get_atoms().Atome()[index].second[1] << endl;
     }
 
     //zufällige Position auslesen
     int xrand = rand() % g.size();
     int yrand = rand() % g.size();
-    if (g.cell_at(xpos, ypos) != g.cell_at(xrand, yrand)) {
+    if (xpos != xrand && ypos != yrand) {
         cout << "Zufällige Position :(" << xrand << "|" << yrand << ")" << endl;
         cout << g.print_neighbours_at(xrand, yrand);
         mean = 0;
@@ -161,10 +162,11 @@ int main() {
         } else {
             cout << "Keine Nachbarn vorhanden" << endl;
         }
-        cout << "Distanz zwischen den Positionen: "
-             << (double) g.cell_at(xrand, yrand).distance_to(g.cell_at(xpos, ypos))
-             << endl;
-
+        if (vector3.size() > 0) {
+            cout << "Distanz zwischen den Positionen: "
+                 << (double) g.cell_at(xrand, yrand).distance_to(g.cell_at(xpos, ypos))
+                 << endl;
+        }
     } else {
         cout << "Zufällige Position entspricht eingegebener Position!" << endl;
     }
