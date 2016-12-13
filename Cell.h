@@ -14,9 +14,9 @@ class Cell {
 public:
 
     //Konstruktoren
-    Cell(int id, vector<int> Koordinaten);
+    Cell(int id, vector<double> Koordinaten);
 
-    Cell(int id, int wert, vector<int> Koordinaten);
+    Cell(int id, int wert, vector<double> Koordinaten);
 
     Cell();
 
@@ -25,19 +25,19 @@ public:
 
     int get_value() const;
 
-    vector<int> get_coords() const;
+    vector<double> get_coords() const;
 
     Basis get_atoms();
 
     //Relationen
-    vector<int> distance__to(Cell c);
+    vector<double> distance__to(Cell c);
 
     double distance_to(Cell c);
 
     //Setter-Methoden
     void set_value(int wert);
 
-    void move_to(vector<int> Koordinaten);
+    void move_to(vector<double> Koordinaten);
 
     void set_base(Basis basis);
 
@@ -47,14 +47,14 @@ public:
     bool operator!=(const Cell &comp);
 
     //Transformationen
-    void move_by(vector<int> Vektor);
+    void move_by(vector<double> Vektor);
 
 
 private:
     //Eingeschaften
     int id;
     int value;
-    vector<int> coords;
+    vector<double> coords;
     Basis base;
 };
 

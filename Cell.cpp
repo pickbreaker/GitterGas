@@ -9,13 +9,13 @@
 using namespace std;
 
 //Konstruktoren
-Cell::Cell(int nummer, vector<int> Koordinaten) {
+Cell::Cell(int nummer, vector<double> Koordinaten) {
     id = nummer;
     value = 0;
     coords = Koordinaten;
 };
 
-Cell::Cell(int nummer, int wert, vector<int> Koordinaten) {
+Cell::Cell(int nummer, int wert, vector<double> Koordinaten) {
     id = nummer;
     value = wert;
     coords = Koordinaten;
@@ -24,7 +24,7 @@ Cell::Cell(int nummer, int wert, vector<int> Koordinaten) {
 Cell::Cell() {
     id = -1;
     value = -1;
-    coords = vector<int>();
+    coords = vector<double>();
 }
 
 //Getter-Methoden
@@ -36,7 +36,7 @@ int Cell::get_value() const {
     return value;
 }
 
-vector<int> Cell::get_coords() const {
+vector<double> Cell::get_coords() const {
     return coords;
 }
 
@@ -45,8 +45,8 @@ Basis Cell::get_atoms() {
 }
 
 //Relationen
-vector<int> Cell::distance__to(Cell c) {
-    vector<int> vector1;
+vector<double> Cell::distance__to(Cell c) {
+    vector<double> vector1;
     for (int i = 0; i < c.get_coords().size(); i++) {
         if (i < get_coords().size()) {
             vector1.push_back(c.get_coords()[i] - get_coords()[i]);
@@ -57,7 +57,7 @@ vector<int> Cell::distance__to(Cell c) {
 
 double Cell::distance_to(Cell c) {
     double res = 0;
-    vector<int> dist = distance__to(c);
+    vector<double> dist = distance__to(c);
     for (int i = 0; i < dist.size(); i++) {
         res += pow((double) dist[i], dist.size());
     }
@@ -70,7 +70,7 @@ void Cell::set_value(int wert) {
     value = wert;
 }
 
-void Cell::move_to(vector<int> Koordinaten) {
+void Cell::move_to(vector<double> Koordinaten) {
     coords = Koordinaten;
 }
 
@@ -101,7 +101,7 @@ bool Cell::operator!=(const Cell &comp) {
 }
 
 //Transformationen
-void Cell::move_by(vector<int> Vektor) {
+void Cell::move_by(vector<double> Vektor) {
     for (int i = 0; i < coords.size(); i++) {
         if (i < Vektor.size()) {
             coords[i] = Vektor[i];

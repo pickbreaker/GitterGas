@@ -2,6 +2,7 @@
 #include <vector>
 #include "Gitter.h"
 #include "Basis.h"
+#include "MathParser.h"
 #include <initializer_list>
 
 /*
@@ -52,10 +53,36 @@ int main() {
     //Gitter erstellen
     cout << "Gewünschte Größe: ";
     int groesse;
+    vector<vector<double>> vector_base;
+    vector<double> vector_base_1;
+    vector<double> vector_base_2;
     cin >> groesse;
+    cout << "Gitterbasisvektor 1:" << endl;
+    cout << "x-Komponente: ";
+    string value;
+    double eval;
+    MathParser parser;
+    cin >> value;
+    eval=parser.evalExpr(value);
+    vector_base_1.push_back(eval);
+    cout << "y-Komponente: ";
+    cin >> value;
+    eval=parser.evalExpr(value);
+    vector_base_1.push_back(eval);
+    vector_base.push_back(vector_base_1);
+    cout << "Gitterbasisvektor 2:" << endl;
+    cout << "x-Komponente: ";
+    cin >> value;
+    eval=parser.evalExpr(value);
+    vector_base_2.push_back(eval);
+    cout << "y-Komponente: ";
+    cin >> value;
+    eval=parser.evalExpr(value);
+    vector_base_2.push_back(eval);
+    vector_base.push_back(vector_base_2);
     cout << "Größe: " << groesse << endl;
     cout << "Gitter:" << endl;
-    Gitter g(groesse);
+    Gitter g(groesse, vector_base);
     set_label(g);
     set_value(g);
     cout << "Basis erstellen" << endl;
@@ -174,6 +201,7 @@ int main() {
     cout << g.print_ids();
     cout << g.print_coords();
     cout << g.print_values();
+/*  Deaktiviert aufgrund Inkompatibilität mit nicht-quadratischen Gittern
     g.xmirr();
     cout << g.print_ids();
     cout << g.print_coords();
@@ -186,7 +214,7 @@ int main() {
     cout << g.print_ids();
     cout << g.print_coords();
     cout << g.print_values();
-
+*/
     //Ende
     return 0;
 }

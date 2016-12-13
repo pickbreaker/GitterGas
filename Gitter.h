@@ -17,7 +17,7 @@ using std::pair;
 class Gitter {
 public:
     //Konstruktoren
-    Gitter(int size);
+    Gitter(int size,vector<vector<double>> base);
 
     //Getter-Methoden
     int size();
@@ -72,6 +72,7 @@ private:
     //Eigenschaften
     vector<vector<Cell>> v;
     int groesse;
+    vector<vector<double>> base_vectors;
 
 //Interne Methoden
     void coords_pos_fix();

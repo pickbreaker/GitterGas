@@ -14,8 +14,9 @@ using std::pair;
 using std::vector;
 
 //Konstruktoren
-Gitter::Gitter(int size) {
+Gitter::Gitter(int size, vector<vector<double>> base) {
     groesse = size;
+    base_vectors = base;
     for (int j = 0; j < size; j++) {
         vector<Cell> vector1;
         for (int i = 0; i < size; i++) {
@@ -260,9 +261,9 @@ string Gitter::print_neighbours_at(int xpos, int ypos) {
 
 //Setter-Methoden
 void Gitter::label(int xpos, int ypos) {
-    vector<int> vector2;
-    vector2.push_back(xpos);
-    vector2.push_back(ypos);
+    vector<double> vector2;
+    vector2.push_back(xpos * base_vectors[0][0] + ypos * base_vectors[0][1]);
+    vector2.push_back(ypos * base_vectors[1][1] + xpos * base_vectors[1][0]);
     v[ypos][xpos] = Cell(ypos * groesse + xpos, vector2);
 }
 
@@ -283,11 +284,11 @@ void Gitter::set_base(Basis basis) {
     }
 
 }*/
-
+/* Deaktiviert aufgrund Inkompatibilität mit nicht-quadratischen Gittern
 void Gitter::xmirr() {
     for (int i = 0; i < size(); i++) {
         for (int j = 0; j < size(); j++) {
-            cell_at(j, i).move_to(vector<int>({abs(j - (size() - 1)), i}));
+            cell_at(j, i).move_to(vector<double>({abs(j - (size() - 1)), i}));
         }
     }
     coords_pos_fix();
@@ -296,7 +297,7 @@ void Gitter::xmirr() {
 void Gitter::ymirr() {
     for (int i = 0; i < size(); i++) {
         for (int j = 0; j < size(); j++) {
-            cell_at(j, i).move_to(vector<int>({j, abs(i - (size() - 1))}));
+            cell_at(j, i).move_to(vector<double>({j, abs(i - (size() - 1))}));
         }
     }
     coords_pos_fix();
@@ -305,7 +306,7 @@ void Gitter::ymirr() {
 void Gitter::centroinv() {
     for (int i = 0; i < size(); i++) {
         for (int j = 0; j < size(); j++) {
-            cell_at(j, i).move_to(vector<int>({abs(j - (size() - 1)), abs(i - (size() - 1))}));
+            cell_at(j, i).move_to(vector<double>({abs(j - (size() - 1)), abs(i - (size() - 1))}));
         }
     }
     coords_pos_fix();
@@ -320,7 +321,7 @@ void Gitter::coords_pos_fix() {
     }
     v = neu.Data();
 }
-
+*/
 double Gitter::distance(vector<double> v1, vector<double> v2) {
     double dist = 0;
     try {
